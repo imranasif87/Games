@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinosaur Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js" allow="autoplay"></script>
+    <script>
+        // Create a new game
+        var game = new Phaser.Game({
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            parent: "game",
+            physics: {
+                default: "arcade",
+                arcade: {
+                    gravity: { y: 1000 }
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        });
+
+        // Preload game assets
+        function preload() {
+            this.load.image("dinosaur", "assets/dinosaur.png");
+            this.load.image("obstacle", "assets/obstacle.png");
+        }
+
+        // Global variables
+        var dinosaur;
+        var obstacles;
+        var cursors;
+        var jumpButton;
+
+        // Create the game
+        function create() {
+            // Enable physics
+            this.physics.world.enable(this.physics.add.image(100, this.sys.game.config.height - 150, "dinosaur"));
+            dinosaur = this.physics.add.image(100, this.sys.game.config.height - 150, "dinosaur");
+            dinosaur.setCollideWorldBounds(true);
+            dinosaur.setGravityY(1000);
+            dinosaur.setScale(0.5);
+            dinosaur.setOrigin(0.5, 0.5);
+
+            // Add the obstacles
+            obstacles = this.physics.add.staticGroup();
+            for (var i = 0; i < 5; i++) {
+                var obstacle = obstacles.create(200 * i, this.sys.game.config.height - 10, "obstacle");
+                obstacle.setScale(0.5);
+                obstacle.setOrigin(0.5, 0.5);
+            }
+
+            // Add the controls
+            cursors = this.input.keyboard.createCursorKeys();
+            jumpButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        }
+
+        // Update the game
+        function update() {
+            // Collide the dinosaur with the obstacles
+            this.physics.world.collide(dinosaur, obstacles, gameOver, null, this);
+
+            // Move the dinosaur
+            dinosaur.setVelocityX(0);
+            if (cursors.left.isDown) {
+                dinosaur.setVelocityX(-200);
+            } else if (cursors.right.isDown) {
+                dinosaur.setVelocityX(200);
+            }
+
+            // Make the dinosaur jump
+            if (jumpButton.isDown && (dinosaur.body.onFloor() || dinosaur.body.touching.down)) {
+                dinosaur.setVelocityY(-500);
+            }
+        }
+
+        // Game over
+        function gameOver() {
+            this.scene.restart();
+        }
+
+    </script>
+</head>
+
+<body>
+</body>
+</html>
