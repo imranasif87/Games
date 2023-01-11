@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game</title>
+
+    <style>
+        #board {
+            border-collapse: collapse;
+        }
+
+        #board td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid black;
+        }
+    </style>
+
+</head>
+
+<body>
+    <table id="board">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <script>
+        const board = document.getElementById("board");
+        let currentPlayer = "X";
+
+        board.addEventListener("click", function (event) {
+            // Check if the cell that was clicked is empty
+            if (event.target.textContent === "") {
+                // Place the current player's mark in the cell
+                event.target.textContent = currentPlayer;
+
+                // Check for a win
+                if (checkWin(currentPlayer)) {
+                    alert(currentPlayer + " wins!");
+                    return;
+                }
+
+                // Check for a draw
+                if (checkDraw()) {
+                    alert("Draw!");
+                    return;
+                }
+
+                // Switch to the other player
+                if (currentPlayer === "X") {
+                    currentPlayer = "O";
+                } else {
+                    currentPlayer = "X";
+                }
+            }
+        });
+
+        function checkWin(player) {
+            // Get all of the cells on the board
+            const cells = document.querySelectorAll("#board td");
+
+            // Check for horizontal wins
+            if (cells[0].textContent === player && cells[1].textContent === player && cells[2].textContent === player) {
+                return true;
+            }
+            if (cells[3].textContent === player && cells[4].textContent === player && cells[5].textContent === player) {
+                return true;
+            }
+            if (cells[6].textContent === player && cells[7].textContent === player && cells[8].textContent === player) {
+                return true;
+            }
+
+            // Check for vertical wins
+            if (cells[0].textContent === player && cells[3].textContent === player && cells[6].textContent === player) {
+                return true;
+            }
+            if (cells[1].textContent === player && cells[4].textContent === player && cells[7].textContent === player) {
+                return true;
+            }
+            if (cells[2].textContent === player && cells[5].textContent === player && cells[8].textContent === player) {
+                return true;
+            }
+
+            // Check for diagonal wins
+            if (cells[0].textContent === player && cells[4].textContent === player && cells[8].textContent === player) {
+                return true;
+            }
+            if (cells[2].textContent === player && cells[4].textContent === player && cells[6].textContent === player) {
+                return true;
+            }
+
+            // If no wins were found, return false
+            return false;
+        }
+
+        function checkDraw() {
+            // Get all of the cells on the board
+            const cells = document.querySelectorAll("#board td");
+
+            // Check if any cell is empty
+            for (const cell of cells) {
+                if (cell.textContent === "") {
+                    return false;
+                }
+            }
+
+            // If no cells are empty, return true (draw)
+            return true;
+        }
+
+    </script>
+</body>
+
+</html>
