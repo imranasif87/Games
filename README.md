@@ -6,6 +6,6 @@
 
 2. Tic Tac Toe Geme using Javascript, HTML5 and CSS
  
-  ![Tic Tac Toe Game](images/tic_tac_toe.png)
+  <img src="images/tic_tac_toe.png" alt="Tic Tac Toe Game" style="width:200px;"/>
   
 3. New game is coming soon...
